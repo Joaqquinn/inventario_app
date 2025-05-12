@@ -13,24 +13,41 @@ USERS = {
 
 class LoginWindow(tk.Tk):
     """
-    Pantalla de login que solicita usuario y contraseña.
-    Al autenticarse, inicia la aplicación principal con el rol correspondiente.
+    Pantalla de login con estilo profesional.
     """
     def __init__(self):
         super().__init__()
-        self.title("Login - Inventarios")
-        self.geometry("300x160")
+        self.title("Inicio de Sesión - Inventarios")
+        self.geometry("400x300")
         self.resizable(False, False)
-        
-        ttk.Label(self, text="Usuario:").pack(pady=(15,0))
+        self.configure(bg='#2c3e50')
+
+        style = ttk.Style(self)
+        style.theme_use('clam')
+        style.configure('Login.TFrame', background='#34495e')
+        style.configure('Login.Header.TLabel', background='#34495e', foreground='#ecf0f1', font=('Segoe UI', 18, 'bold'))
+        style.configure('Login.TLabel', background='#34495e', foreground='#ecf0f1', font=('Segoe UI', 11))
+        style.configure('Login.TEntry', foreground='#2c3e50', font=('Segoe UI', 11), fieldbackground='#ecf0f1')
+        style.configure('Login.TButton', background='#e67e22', foreground='white', font=('Segoe UI', 12, 'bold'))
+
+        frame = ttk.Frame(self, style='Login.TFrame', padding=20)
+        frame.place(relx=0.5, rely=0.5, anchor='center')
+
+        header = ttk.Label(frame, text="INVENTORY APP", style='Login.Header.TLabel')
+        header.grid(row=0, column=0, columnspan=2, pady=(0,20))
+
+        ttk.Label(frame, text="Usuario:", style='Login.TLabel').grid(row=1, column=0, sticky='e', padx=5, pady=5)
         self.user_var = tk.StringVar()
-        ttk.Entry(self, textvariable=self.user_var).pack()
+        ttk.Entry(frame, textvariable=self.user_var, style='Login.TEntry', width=30).grid(row=1, column=1, pady=5)
 
-        ttk.Label(self, text="Contraseña:").pack(pady=(10,0))
+        ttk.Label(frame, text="Contraseña:", style='Login.TLabel').grid(row=2, column=0, sticky='e', padx=5, pady=5)
         self.pw_var = tk.StringVar()
-        ttk.Entry(self, textvariable=self.pw_var, show="*").pack()
+        ttk.Entry(frame, textvariable=self.pw_var, show='*', style='Login.TEntry', width=30).grid(row=2, column=1, pady=5)
 
-        ttk.Button(self, text="Entrar", command=self._login).pack(pady=15)
+        login_btn = ttk.Button(frame, text="ENTRAR", style='Login.TButton', command=self._login)
+        login_btn.grid(row=3, column=0, columnspan=2, pady=(20,0), ipadx=10)
+
+        self.bind('<Return>', lambda e: self._login())
 
     def _login(self):
         user = self.user_var.get().strip()
@@ -39,11 +56,13 @@ class LoginWindow(tk.Tk):
         if info and pw == info['password']:
             self.destroy()
             init_db()
-            app = InventoryApp(user, info['role'])
+            app = InventoryApp(user.capitalize(), info['role'])
             app.mainloop()
         else:
             messagebox.showerror("Error", "Usuario o contraseña incorrecta.")
+            self.pw_var.set("")
 
+            
 class InventoryApp(tk.Tk):
     """
     Aplicación principal de gestión de inventarios.
