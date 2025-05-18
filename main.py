@@ -3,6 +3,9 @@ from tkinter import messagebox
 import sqlite3
 from views.product_view import registrar_producto
 from views.movement_view import registrar_movimiento
+from views.list_product_view import listar_productos
+from views.alert_view import mostrar_alertas_stock_bajo
+from views.history_view import ver_historial_movimientos
 
 def validar_login():
     usuario = entry_usuario.get()
@@ -32,7 +35,9 @@ def validar_login():
 
         tk.Button(menu, text="Registrar Producto", command=registrar_producto).pack(pady=5)
         tk.Button(menu, text="Registrar Movimiento", command=registrar_movimiento).pack(pady=5)
-
+        tk.Button(menu, text="Ver Productos", command=listar_productos).pack(pady=5)
+        tk.Button(menu, text="Alertas de Stock Bajo", command=mostrar_alertas_stock_bajo).pack(pady=5)
+        tk.Button(menu, text="Ver Historial de Movimientos", command=ver_historial_movimientos).pack(pady=5)
         menu.mainloop()
 
 
