@@ -1,59 +1,38 @@
-import tkinter as tk
-from tkinter import messagebox
-import sqlite3
-from views.product_view import registrar_producto
-from views.movement_view import registrar_movimiento
-from views.list_product_view import listar_productos
-from views.alert_view import mostrar_alertas_stock_bajo
-from views.history_view import ver_historial_movimientos
+def mostrar_menu(nombre_usuario, rol):
+    import tkinter as tk
+    from views.product_view import registrar_producto
+    from views.movement_view import registrar_movimiento
+    from views.list_products_view import listar_productos
+    from views.alert_view import mostrar_alertas_stock_bajo
+    from views.history_view import ver_historial_movimientos
 
-def validar_login():
-    usuario = entry_usuario.get()
-    contraseña = entry_contraseña.get()
+    def centrar_ventana(ventana, ancho, alto):
+        ventana.update_idletasks()
+        pantalla_ancho = ventana.winfo_screenwidth()
+        pantalla_alto = ventana.winfo_screenheight()
+        x = (pantalla_ancho // 2) - (ancho // 2)
+        y = (pantalla_alto // 2) - (alto // 2)
+        ventana.geometry(f"{ancho}x{alto}+{x}+{y}")
 
-    conn = sqlite3.connect("db/inventario.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-        SELECT usuarios.username, roles.nombre 
-        FROM usuarios 
-        JOIN roles ON usuarios.rol_id = roles.id 
-        WHERE usuarios.username = ? AND usuarios.password = ?
-    """, (usuario, contraseña))
-    resultado = cursor.fetchone()
-    conn.close()
+    menu = tk.Tk()
+    menu.title("Menú Principal")
+    centrar_ventana(menu, 320, 400)
 
-    if resultado:
-        nombre_usuario, rol = resultado
-        messagebox.showinfo("Login exitoso", f"Bienvenido, {nombre_usuario} ({rol})")
-        ventana.destroy()
+    frame = tk.Frame(menu, padx=20, pady=20)
+    frame.pack(fill=tk.BOTH, expand=True)
 
-        menu = tk.Tk()
-        menu.title("Menú Principal")
-        menu.geometry("300x200")
+    tk.Label(frame, text=f"Bienvenido, {nombre_usuario} ({rol})", font=("Arial", 14, "bold")).pack(pady=10)
 
-        tk.Label(menu, text=f"Bienvenido, {nombre_usuario} ({rol})").pack(pady=10)
+    tk.Button(frame, text="Registrar Producto", font=("Arial", 12), command=registrar_producto).pack(pady=5)
+    tk.Button(frame, text="Registrar Movimiento", font=("Arial", 12), command=registrar_movimiento).pack(pady=5)
+    tk.Button(frame, text="Ver Productos", font=("Arial", 12), command=listar_productos).pack(pady=5)
+    tk.Button(frame, text="Alertas de Stock Bajo", font=("Arial", 12), command=mostrar_alertas_stock_bajo).pack(pady=5)
+    tk.Button(frame, text="Ver Historial de Movimientos", font=("Arial", 12), command=ver_historial_movimientos).pack(pady=5)
 
-        tk.Button(menu, text="Registrar Producto", command=registrar_producto).pack(pady=5)
-        tk.Button(menu, text="Registrar Movimiento", command=registrar_movimiento).pack(pady=5)
-        tk.Button(menu, text="Ver Productos", command=listar_productos).pack(pady=5)
-        tk.Button(menu, text="Alertas de Stock Bajo", command=mostrar_alertas_stock_bajo).pack(pady=5)
-        tk.Button(menu, text="Ver Historial de Movimientos", command=ver_historial_movimientos).pack(pady=5)
-        menu.mainloop()
+    menu.mainloop()
 
 
-# Ventana
-ventana = tk.Tk()
-ventana.title("Login - Inventario Maestranzas Unidos")
-ventana.geometry("300x200")
-
-tk.Label(ventana, text="Usuario").pack(pady=5)
-entry_usuario = tk.Entry(ventana)
-entry_usuario.pack()
-
-tk.Label(ventana, text="Contraseña").pack(pady=5)
-entry_contraseña = tk.Entry(ventana, show="*")
-entry_contraseña.pack()
-
-tk.Button(ventana, text="Ingresar", command=validar_login).pack(pady=20)
-
-ventana.mainloop()
+# Iniciar app desde login
+if __name__ == "__main__":
+    from views.login_view import mostrar_login
+    mostrar_login()
