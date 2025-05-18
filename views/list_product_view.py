@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from utils.style import aplicar_estilos_generales
 import sqlite3
 
 def listar_productos():
