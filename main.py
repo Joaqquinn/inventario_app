@@ -2,9 +2,9 @@ def mostrar_menu(nombre_usuario, rol):
     import tkinter as tk
     from views.product_view import registrar_producto
     from views.movement_view import registrar_movimiento
-    from views.list_products_view import listar_productos
     from views.alert_view import mostrar_alertas_stock_bajo
     from views.history_view import ver_historial_movimientos
+    from views.list_product_view import listar_productos
 
     def centrar_ventana(ventana, ancho, alto):
         ventana.update_idletasks()

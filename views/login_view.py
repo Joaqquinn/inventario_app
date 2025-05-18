@@ -46,7 +46,7 @@ def mostrar_login():
     frame.pack(pady=20)
 
     # Cargar logo
-    ruta_logo = os.path.join("assets", "logo_maestranzas.png")
+    ruta_logo = os.path.join("assets", "logo.png")
     if os.path.exists(ruta_logo):
         logo_img = Image.open(ruta_logo)
         logo_img = logo_img.resize((150, 150))
